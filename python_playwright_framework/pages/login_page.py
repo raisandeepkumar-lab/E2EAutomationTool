@@ -33,7 +33,7 @@ class LinkedInLoginPage:
 
     def open(self):
         self.page.goto(self.URL, wait_until="domcontentloaded")
-        self.page.wait_for_load_state("networkidle", timeout=10000)
+        self.page.wait_for_load_state("domcontentloaded", timeout=15000)
         return self
 
     def _find_first_visible(self, selectors: list[str]) -> Locator:
@@ -54,7 +54,7 @@ class LinkedInLoginPage:
         password_input.fill(password)
         submit_button.wait_for(state="visible", timeout=15000)
         submit_button.click()
-        self.page.wait_for_load_state("networkidle", timeout=30000)
+        self.page.wait_for_load_state("domcontentloaded", timeout=20000)
         return self
 
     def open_jobs(self):
