@@ -22,6 +22,11 @@ class LinkedInLoginPage:
         "button:has-text('Sign in')",
         "button:has-text('Log in')",
     ]
+    JOBS_LINK_SELECTORS = [
+        "a[href='https://www.linkedin.com/jobs/']",
+        "a[aria-label*='Jobs']",
+        "a[href='/jobs/']",
+    ]
 
     def __init__(self, page: Page):
         self.page = page
@@ -50,6 +55,13 @@ class LinkedInLoginPage:
         submit_button.wait_for(state="visible", timeout=15000)
         submit_button.click()
         self.page.wait_for_load_state("networkidle", timeout=30000)
+        return self
+
+    def open_jobs(self):
+        jobs_link = self._find_first_visible(self.JOBS_LINK_SELECTORS)
+        jobs_link.wait_for(state="visible", timeout=20000)
+        jobs_link.click()
+        self.page.wait_for_load_state("domcontentloaded", timeout=30000)
         return self
 
     def is_logged_in(self) -> bool:

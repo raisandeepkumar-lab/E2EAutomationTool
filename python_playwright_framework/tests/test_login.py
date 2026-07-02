@@ -46,3 +46,22 @@ def test_regression_uses_saved_session(browser: Browser, storage_state_path: Pat
 
     assert "/feed" in page.url.lower() or "/in/" in page.url.lower()
     context.close()
+
+
+def test_login_and_open_jobs(browser: Browser):
+    username = os.getenv("LINKEDIN_USERNAME")
+    password = os.getenv("LINKEDIN_PASSWORD")
+
+    if not username or not password:
+        pytest.skip("Set LINKEDIN_USERNAME and LINKEDIN_PASSWORD environment variables to run the login test")
+
+    context = browser.new_context()
+    page = context.new_page()
+
+    login_page = LinkedInLoginPage(page)
+    login_page.open()
+    login_page.login(username, password)
+    login_page.open_jobs()
+
+    assert "/jobs" in page.url.lower()
+    context.close()
